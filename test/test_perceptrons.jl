@@ -1,5 +1,4 @@
 @testset "Perceptrons" begin
-    using Test
     using Perceptrons: Perceptron
     using Perceptrons: fit_one!, predict, score, scores, update!, weight
 
