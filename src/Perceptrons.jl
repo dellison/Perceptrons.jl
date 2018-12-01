@@ -1,5 +1,7 @@
 module Perceptrons
 
+using Random
+
 Base.argmax(f::Function, xs) = first(sort(collect(xs), by = f, rev = true))
 
 """
