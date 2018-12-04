@@ -7,9 +7,9 @@ BinaryPerceptron(::Type{Dict}) = BinaryPerceptron{Dict{Any,Number}}()
 BinaryPerceptron(T::Type{<:Dict}) = BinaryPerceptron{T}()
 BinaryPerceptron(n::Int) = BinaryPerceptron{Vector{Int}}(zeros(n))
 
-function fit_one!(p::BinaryPerceptron, y, ϕ, α=1)
+function fit_one!(p::BinaryPerceptron, ϕ, y, α=1)
     ŷ = predict(p, ϕ)
-    (y != ŷ) && update!(p, y, ϕ, α)
+    (y != ŷ) && update!(p, ϕ, y, α)
     return ŷ
 end
 
@@ -19,7 +19,7 @@ score(p::BinaryPerceptron, ϕ) = sum(weight(p, x) for x in ϕ)
 weight(p::BinaryPerceptron{<:Dict}, x) = get(p.weights, x, 0)
 weight(p::BinaryPerceptron{<:Vector}, x) = p.weights[x]
 
-function update!(p::BinaryPerceptron, y::Bool, ϕ, α=1)
+function update!(p::BinaryPerceptron, ϕ, y::Bool, α=1)
     @assert 0 <= α <= 1 
     !y && (α *= -1)
     for x in ϕ
@@ -40,9 +40,9 @@ Perceptron(nclasses::Int, nfeats::Int) = Perceptron(1:nclasses, zeros(nclasses, 
 weight(p::Perceptron{<:Dict}, x, y) = get(weights(p, x), y, 0)
 weight(p::Perceptron{<:AbstractMatrix}, x, y) = p.weights[x, y]
 
-score(p::Perceptron, y, ϕ) = sum(weight(p, x, y) for x in ϕ)
+score(p::Perceptron, ϕ, y) = sum(weight(p, x, y) for x in ϕ)
 
-predict(p::Perceptron, ϕ) = argmax(y -> score(p, y, ϕ), p.classes)
+predict(p::Perceptron, ϕ) = argmax(y -> score(p, ϕ, y), p.classes)
 
 function scores(p::Perceptron{<:Dict}, ϕ)
     dict = Dict(c => 0 for c in p.classes)
@@ -56,7 +56,7 @@ weights(p::Perceptron{<:AbstractMatrix}, x) = p.weights[:, x]
 weights(p::Perceptron{<:Dict}, x) =
     get!(() -> Dict(c => 0 for c in p.classes), p.weights, x)
 
-function update!(p::Perceptron{<:Dict}, ŷ, y, ϕ, α=1)
+function update!(p::Perceptron{<:Dict}, ϕ, ŷ, y, α=1)
     for x in ϕ
         ws = weights(p, x)
         ws[y] += α
@@ -64,8 +64,8 @@ function update!(p::Perceptron{<:Dict}, ŷ, y, ϕ, α=1)
     end
 end
 
-function fit_one!(p::Perceptron, y, ϕ, α=1)
+function fit_one!(p::Perceptron, ϕ, y, α=1)
     ŷ = predict(p, ϕ)
-    y != ŷ && update!(p, ŷ, y, ϕ, α)
+    y != ŷ && update!(p, ϕ, ŷ, y, α)
     return ŷ
 end
