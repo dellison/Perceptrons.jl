@@ -12,6 +12,6 @@
     @test predict(p, x) == 1
 
     Perceptrons.fit_one!(p, x, y)
-    @test scores(p, x) == [-3,3,0]
+    @test scores(p, x) == [-4,4,0]
     @test predict(p, x) == 2
 end

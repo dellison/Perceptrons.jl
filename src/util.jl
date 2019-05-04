@@ -7,7 +7,7 @@ end
 AveragedWeight(T::Type{<:Number}, t=0) = AveragedWeight{T}(t,zero(T),zero(T))
 AveragedWeight(t=0) = AveragedWeight(typeof(t),t)
 
-import Base.==, Base.+, Base.*, Base.isless
+import Base.==, Base.+, Base.*, Base.-, Base./, Base.isless, Base.zero
 import Base.iterate, Base.show
 
 Base.isless(w::AveragedWeight, x) = isless(w.weight, x)
@@ -18,8 +18,15 @@ Base.isless(w1::AveragedWeight, w2::AveragedWeight) = isless(w1.weight, w2.weigh
 
 +(w::AveragedWeight, x) = AveragedWeight(_w(w) + _w(x), w.t, w.summed)
 +(x, w::AveragedWeight) = AveragedWeight(_w(w) + _w(x), w.t, w.summed)
+-(w::AveragedWeight, x) = AveragedWeight(_w(w) - _w(x), w.t, w.summed)
+-(x, w::AveragedWeight) = AveragedWeight(_w(w) - _w(x), w.t, w.summed)
 *(w::AveragedWeight, x) = AveragedWeight(_w(w) * _w(x), w.t, w.summed)
 *(x, w::AveragedWeight) = AveragedWeight(_w(w) * _w(x), w.t, w.summed)
+/(w::AveragedWeight, x) = AveragedWeight(_w(w) / _w(x), w.t, w.summed)
+/(x, w::AveragedWeight) = AveragedWeight(_w(w) / _w(x), w.t, w.summed)
+
+Base.zero(T::AveragedWeight) = AveragedWeight(T)
+Base.zero(T::Type{<:AveragedWeight}) = AveragedWeight(T)
 
 Base.iterate(w::AveragedWeight, state...) = iterate(w.weight, state...)
 

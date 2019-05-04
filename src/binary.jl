@@ -40,7 +40,7 @@ const SparsePerceptron{T} = Perceptron{SparseVector,T}
 
 todo
 """
-mutable struct AveragedPerceptron{W,T}
+mutable struct AveragedPerceptron{W,T} <: AbstractPerceptron{T}
     t::Int
     p::Perceptron{W,AveragedWeight{T}}
 end

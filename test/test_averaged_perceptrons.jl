@@ -26,4 +26,16 @@ end
 
 @testset "Multiclass Averaged Perceptrons" begin
 
+    p = MulticlassAveragedPerceptron(5, 3)
+
+    x, y = [1,0,0,0,0], 2
+    @test p.p.b == [0,0,0]
+    @test p.p.w == zeros(5, 3)
+    @test scores(p, x) == [0,0,0]
+    @test predict(p, x) == 1
+    Perceptrons.fit_one!(p, x, y)
+    @test p.p.b == [-1,1,0]
+    @test p.p.w == [-1 1 0; 0 0 0; 0 0 0; 0 0 0; 0 0 0]
+    @test scores(p, x) == [-2,2,0]
+    @test predict(p, x) == y == 2
 end
