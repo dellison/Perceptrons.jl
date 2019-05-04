@@ -1,6 +1,9 @@
 module Perceptrons
 
-export Perceptron, MulticlassPerceptron
+export Perceptron, SparsePerceptron
+export AveragedPerceptron, SparseAveragedPerceptron
+export MulticlassPerceptron, SparseMulticlassPerceptron
+export MulticlassAveragedPerceptron, SparseMulticlassAveragedPerceptron
 
 using LinearAlgebra, SparseArrays
 
@@ -25,6 +28,7 @@ function fit!(p::AbstractPerceptron, data, r=1)
     end
 end
 
+include("util.jl")
 include("binary.jl")
 include("multiclass.jl")
 

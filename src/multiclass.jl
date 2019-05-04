@@ -26,3 +26,7 @@ function update!(p::MulticlassPerceptron, x, ŷ, y, r=1)
     p.w[:, ŷ] .-= update
     p
 end
+
+const SparseMulticlassPerceptron{T} = MulticlassPerceptron{SparseVector,T}
+const MulticlassAveragedPerceptron{W,T} = MulticlassPerceptron{W,AveragedWeight{T}}
+const SparseMulticlassAveragedPerceptron{T} = MulticlassPerceptron{SparseVector{AveragedWeight{T},T}}
