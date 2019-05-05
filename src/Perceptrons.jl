@@ -12,7 +12,7 @@ abstract type AbstractPerceptron{T} end
 """
     fit!(p, data, r=1)
 
-todo
+Fit a perceptron to a dataset (one iteration).
 """
 function fit!(p::AbstractPerceptron, data, r=1)
     for (x, y) in data
