@@ -7,14 +7,6 @@ export MulticlassAveragedPerceptron, SparseMulticlassAveragedPerceptron
 
 using LinearAlgebra, SparseArrays
 
-Base.argmax(f::Function, xs) = first(sort(collect(xs), by = f, rev = true))
-
-LinearAlgebra.dot(dict::Dict, x) = sum(get(dict, feature, 0) for feature in x)
-
-"""
-    AbstractPerceptron
-
-"""
 abstract type AbstractPerceptron{T} end
 
 """
@@ -26,6 +18,11 @@ function fit!(p::AbstractPerceptron, data, r=1)
     for (x, y) in data
         fit_one!(p, x, y, r)
     end
+end
+
+macro percep(P)
+    @eval (p::$P)(x)    = predict(p, x)
+    @eval (p::$P)(x, y) = fit_one!(p, x, y)
 end
 
 include("util.jl")

@@ -1,7 +1,7 @@
 """
     MulticlassPerceptron
 
-todo
+Multi-class perceptron classifier.
 """
 mutable struct MulticlassPerceptron{T,N} <: AbstractPerceptron{T}
     w::T
@@ -16,6 +16,8 @@ function MulticlassPerceptron(T, nfeats::Int, nclasses::Int)
     b = fill(zero(T), nclasses)
     MulticlassPerceptron(w, b)
 end
+
+@percep MulticlassPerceptron
 
 scores(p::MulticlassPerceptron, x) =
     vec(mapslices(w -> dot(w, x), p.w, dims=1)) + p.b
@@ -40,7 +42,7 @@ end
 """
     SparseMulticlassPerceptron
 
-todo
+Multi-class perceptron classifier with sparse feature weights.
 """
 const SparseMulticlassPerceptron{T} =
     MulticlassPerceptron{SparseMatrixCSC{AveragedWeight{T},Int}}
@@ -56,7 +58,7 @@ SparseMulticlassPerceptron(nfeatures::Int,nclasses::Int) =
 """
     MulticlassAveragedPerceptron
 
-todo
+Multiclass averaged perceptron classifier.
 """
 mutable struct MulticlassAveragedPerceptron{W,T} <: AbstractPerceptron{T}
     t::Int
@@ -69,6 +71,8 @@ function MulticlassAveragedPerceptron(in::Int, out::Int)
     p = MulticlassPerceptron(w, b)
     MulticlassAveragedPerceptron(0, p)
 end
+
+@percep MulticlassAveragedPerceptron
 
 """
     averaged(p)
@@ -101,6 +105,11 @@ function fit_one!(p::MulticlassAveragedPerceptron, x, y, r=1)
     fit_one!(p.p, x, y, r)
 end
 
+"""
+    SparseMulticlassAveragedPerceptron
+
+Multi-class averaged perceptron classifier with a sparse coefficient matrix.
+"""
 const SparseMulticlassAveragedPerceptron{T} = MulticlassAveragedPerceptron{SparseMatrixCSC{AveragedWeight{T},Int}}
 
 function SparseMulticlassAveragedPerceptron{T}(nfeatures::Int,nclasses::Int) where T

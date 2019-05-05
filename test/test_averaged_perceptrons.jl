@@ -61,4 +61,5 @@ end
     for i in 1:5
         Perceptrons.fit_one!(p, randx(), randy())
     end
+    Perceptrons.average!(p)
 end

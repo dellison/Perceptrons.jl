@@ -23,3 +23,17 @@
         @test p.b == 0
     end
 end
+
+@testset "Binary Averaged Perceptrons" begin
+
+    p = AveragedPerceptron(5)
+
+end
+
+@testset "Sparse Perceptrons" begin
+
+    p = SparsePerceptron(5)
+
+    p = SparseAveragedPerceptron(5)
+
+end
