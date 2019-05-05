@@ -42,7 +42,16 @@ end
 
 todo
 """
-const SparseMulticlassPerceptron{T} = MulticlassPerceptron{SparseVector,T}
+const SparseMulticlassPerceptron{T} =
+    MulticlassPerceptron{SparseMatrixCSC{AveragedWeight{T},Int}}
+
+function SparseMulticlassPerceptron{T}(nfeatures::Int,nclasses::Int) where T
+    w = spzeros(T,nfeatures,nclasses)
+    b = [zero(T) for _=1:nclasses]
+    MulticlassPerceptron(w,b)
+end
+SparseMulticlassPerceptron(nfeatures::Int,nclasses::Int) =
+    SparseMulticlassAveragedPerceptron{Int}(nfeatures, nclasses)
 
 """
     MulticlassAveragedPerceptron
@@ -92,4 +101,13 @@ function fit_one!(p::MulticlassAveragedPerceptron, x, y, r=1)
     fit_one!(p.p, x, y, r)
 end
 
-const SparseMulticlassAveragedPerceptron{T} = MulticlassPerceptron{SparseVector{AveragedWeight{T},T}}
+const SparseMulticlassAveragedPerceptron{T} = MulticlassAveragedPerceptron{SparseMatrixCSC{AveragedWeight{T},Int}}
+
+function SparseMulticlassAveragedPerceptron{T}(nfeatures::Int,nclasses::Int) where T
+    w = spzeros(AveragedWeight{T},nfeatures,nclasses)
+    b = [AveragedWeight(T) for _=1:nclasses]
+    MulticlassAveragedPerceptron(0,MulticlassPerceptron(w,b))
+end
+SparseMulticlassAveragedPerceptron(nfeatures::Int,nclasses::Int) =
+    SparseMulticlassAveragedPerceptron{Int}(nfeatures, nclasses)
+

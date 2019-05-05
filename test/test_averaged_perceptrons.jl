@@ -51,3 +51,14 @@ end
     @test round.(p.p.w) == round.(p2.w)
     @test round.(p.p.b) == round.(p2.b)
 end
+
+@testset "Sparse Multiclass Averaged Perceptrons" begin
+    using SparseArrays
+    V,T = 10_000, 3
+    randx() = sparsevec([rand(1:V) for _=1:rand(45:60)], 1, V)
+    randy() = rand(1:T)
+    p = SparseMulticlassAveragedPerceptron(V, T)
+    for i in 1:5
+        Perceptrons.fit_one!(p, randx(), randy())
+    end
+end

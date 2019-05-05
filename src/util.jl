@@ -10,14 +10,15 @@ Weight in an averaged perceptron.
 It keeps track of its sum over time as it's updated, and can be
 efficiently averaged at the end of training.
 """
-mutable struct AveragedWeight{T}
+mutable struct AveragedWeight{T <: Number}
     weight::T
     t::Int
     summed::T
 end
     
-AveragedWeight(T::Type{<:Number}, t=0) = AveragedWeight{T}(t,zero(T),zero(T))
-AveragedWeight(t=0) = AveragedWeight(typeof(t),t)
+AveragedWeight{T}() where T = AveragedWeight{T}(zero(T), 0, zero(T))
+AveragedWeight(T::Type{<:Number}, t=0) = AveragedWeight{T}(t,0,zero(T))
+AveragedWeight(t::Number=0) = AveragedWeight(t, 0, zero(t))
 
 _w(x) = x
 _w(w::AveragedWeight) = w.weight
@@ -78,7 +79,7 @@ Base.isless(w1::AveragedWeight, w2::AveragedWeight) = isless(w1.weight, w2.weigh
 
 Base.round(w::AveragedWeight) = AveragedWeight(round(w.weight), w.t, w.summed)
 Base.zero(T::AveragedWeight) = AveragedWeight(T)
-Base.zero(T::Type{<:AveragedWeight}) = AveragedWeight(T)
+Base.zero(T::Type{<:AveragedWeight}) = T()
 
 Base.iterate(w::AveragedWeight, state...) = iterate(w.weight, state...)
 
