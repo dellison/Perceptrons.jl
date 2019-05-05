@@ -61,6 +61,29 @@ function MulticlassAveragedPerceptron(in::Int, out::Int)
     MulticlassAveragedPerceptron(0, p)
 end
 
+"""
+    averaged(p)
+
+Average the perceptron's weights, returning a `MulticlassPerceptron`.
+"""
+function averaged(p::MulticlassAveragedPerceptron)
+    t, w, b = p.t, p.p.w, p.p.b
+    average(w) = averaged(w, t)
+    MulticlassPerceptron(average.(w), average.(b))
+end
+
+"""
+    average!(p)
+
+Average the perceptron's weights in-place.
+"""
+function average!(p::MulticlassAveragedPerceptron)
+    avg! = w -> average!(w, p.t)
+    avg!.(p.p.w)
+    avg!.(p.p.b)
+    p
+end
+
 scores(p::MulticlassAveragedPerceptron, x) = scores(p.p, x)
 predict(p::MulticlassAveragedPerceptron, x) = predict(p.p, x)
 

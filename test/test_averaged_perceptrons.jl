@@ -38,4 +38,16 @@ end
     @test p.p.w == [-1 1 0; 0 0 0; 0 0 0; 0 0 0; 0 0 0]
     @test scores(p, x) == [-2,2,0]
     @test predict(p, x) == y == 2
+
+    x, y = [1,2,3,0,0], 1
+    @test scores(p, x) == [-2,2,0]
+    @test predict(p, x) == 2
+    Perceptrons.fit_one!(p, x, y)
+    @test predict(p, x) == 1
+
+    @test scores(p, x) == [13, -13, 0]
+    p2 = Perceptrons.averaged(p)
+    Perceptrons.average!(p)
+    @test round.(p.p.w) == round.(p2.w)
+    @test round.(p.p.b) == round.(p2.b)
 end
